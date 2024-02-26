@@ -1,0 +1,55 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.PublishedContent;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<dynamic>
+
+
+@* <div>
+    @foreach (var node in ((IPublishedContent)Model).Ancestors().Reverse())
+    {
+        <a href="@node.Url()">@node.Name</a>
+        <span> > </span>
+    }
+    @{
+        string name = ((IPublishedContent)Model).Name;
+    }
+    @name
+    @{
+        var descendants = ((IPublishedContent)Model).Descendants().OrderBy(x => x.Level).ToList();
+    }
+    @if (descendants.Any())
+    {
+        <span> > </span>
+    }
+    @foreach (var node in descendants)
+    {
+        <a href="@node.Url()">@node.Name</a>
+        if (node != descendants.Last())
+        {
+            <span> > </span>
+        }
+    }
+</div> *@
+
+@{
+    var root = ((IPublishedContent)Model).Root();
+    var pages = root.Descendants().OrderBy(x => x.Level).ToList();
+    // var pages = root.Children.Where(x => x.IsVisible() && (!x.HasValue("hideFromNavigation") || !x.Value<bool>("hideFromNavigation")));
+}
+
+<nav>
+    <ul>
+        @{
+            var rootUrl = root.Url();
+        }
+        <li>
+            <a href="@root.Url()">@root.Name</a>
+        </li>
+        @foreach (var _page in pages)
+        {
+            <li>
+                <a href="@_page.Url()">@_page.Name</a>
+            </li>
+        }
+
+    </ul>
+</nav>

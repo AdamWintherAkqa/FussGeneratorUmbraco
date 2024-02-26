@@ -1,0 +1,15 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.HomePage>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "Master.cshtml";
+	var imageCropper = Model.ImageCropper;
+}
+
+@Html.Partial("_Navigation", Model)
+
+
+<h1>@Model.Name</h1>
+<p>@Model.WelcomeText</p>
+
+<img src=@Url.GetCropUrl(imageCropper, "mobile" ) alt="@Model.HeroImageAlt" />

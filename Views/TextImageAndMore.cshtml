@@ -1,0 +1,34 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.TextImageAndMore>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Extensions
+
+@{
+	Layout = "Master.cshtml";
+    var image = Model.Image;
+}
+
+@Html.Partial("_Navigation", Model)
+@* @Html.Partial("Breadcrumb", Model) *@
+@* @Html.Partial("LoginStatus", Model) *@
+
+<h1>@Model.Header</h1>
+<p>@Model.FirstTextarea</p>
+@* <img src="@Url.GetCropUrl(Model.ImageCropper,"square", true)" /> *@
+@* @{
+    var img = Model.Value<MediaWithCrops>("image");
+    if (img != null)
+    {
+        imageUrl = img.GetCropUrl("mobile");
+    }
+} *@
+
+<img src=@Url.GetCropUrl(image, "mobile") alt="@image?.Name"/>
+
+@{
+    if (!string.IsNullOrEmpty(Model.Textarea.ToString()))
+    {
+        <p>@Model.Textarea</p>
+    }
+}

@@ -1,0 +1,68 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.UploadMatch>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "Master.cshtml";
+    var settings = Umbraco.ContentAtRoot().DescendantsOrSelf<Settings>().FirstOrDefault();
+
+    
+
+    var matchLocation = settings?.Matches;
+    var playerLocation = settings?.Players;
+    var teamLocation = settings?.Teams;
+
+    var teams = teamLocation?.Children.OfType<Team>().ToList();
+
+}
+
+@* <ul>
+    @foreach (var team in teams)
+    {
+        <li>@team.Name</li>
+    }
+</ul> *@
+@if (settings is {Matches: not null,Teams: not null })
+{
+    <form method="post" action="@Url.Action("CreateMatch", "UploadMatch")">
+        <fieldset>
+            <input type="hidden" name="parentId" value="@settings.Matches.Id" /> 
+            <input type="hidden" name="contentType" value="match" />
+            <label for="team1">Winning team</label>
+            <select id="team1" name="match.Team1Id">
+                @if (teams != null)
+                {
+                    foreach (var team in teams)
+                    {
+                        <option value="@team.Id">@team.Name</option>
+                    }
+                    @:</select>
+
+                    <label for="team2">Loosing team</label>
+                    @:<select id="team2" name="match.Team2Id">
+                    foreach (var team in teams)
+                    {
+                        <option value="@team.Id">@team.Name</option>
+                    }
+                }
+
+            </select>
+
+            <label for="team1Score">Team 1 score</label>
+            <input type="number" id="team1Score" name="match.Team1Score"/>
+
+            <label for="team2Score">Team 2 score</label>
+            <input type="number" id="team2Score" name="match.Team2Score"/>
+
+            @* <label for="winner">Winner</label>
+        <select id="winner" name="winner">
+            <option value="1">Team 1</option>
+            <option value="2">Team 2</option>
+        </select> *@
+
+            <label for="matchDate">Match date</label>
+            <input type="date" id="matchDate" name="match.MatchDate"/>
+
+            <input type="submit" value="Add match"/>
+        </fieldset>
+    </form>
+}
